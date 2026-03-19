@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Vendedor - La Esperanza</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #f1f8e9; }
+        
+        /* AVISO DE RED DINÁMICO */
+        #status-red { padding: 10px; text-align: center; font-size: 14px; font-weight: bold; color: white; transition: 0.5s; }
+        .online { background-color: #2e7d32; } 
+        .offline { background-color: #ef6c00; } 
+
+        header { 
+            background-color: #2e7d32; color: white; padding: 20px; 
+            text-align: center; border-radius: 0 0 25px 25px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .container { padding: 20px; max-width: 500px; margin: auto; }
+        
+        .welcome-msg { color: #333; font-size: 18px; margin-bottom: 25px; text-align: center; }
+
+        /* TARJETAS DE ACCIÓN */
+        .action-card {
+            background: white; display: flex; align-items: center; padding: 18px; 
+            margin-bottom: 15px; border-radius: 15px; text-decoration: none; 
+            color: #2e7d32; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+            border: 1px solid #c8e6c9; transition: transform 0.2s;
+        }
+        .action-card:active { transform: scale(0.98); background-color: #f9fdf9; }
+
+        .icon-circle { 
+            background: #e8f5e9; width: 45px; height: 45px; border-radius: 50%; 
+            display: flex; justify-content: center; align-items: center; 
+            font-size: 22px; margin-right: 15px; flex-shrink: 0;
+        }
+
+        .logout-btn { 
+            display: block; text-align: center; margin-top: 30px; 
+            color: #d32f2f; text-decoration: none; font-weight: bold; 
+            border: 1px solid #d32f2f; padding: 12px; border-radius: 10px; 
+        }
+    </style>
+</head>
+<body>
+
+    <div id="status-red" class="online">🟢 CONECTADO A LA RED</div>
+
+    <header>
+        <h1 style="margin:0; font-size: 24px;">Mi Puesto de Venta</h1>
+        <p style="margin:5px 0 0; opacity: 0.9; font-size: 14px;">Asociación La Esperanza</p>
+    </header>
+
+    <div class="container">
+        <p class="welcome-msg">¡Bienvenido, Productor!</p>
+
+        <a href="publicar.html" class="action-card">
+            <div class="icon-circle">➕</div>
+            <span>PUBLICAR NUEVA COSECHA</span>
+        </a>
+
+        <a href="#" class="action-card" onclick="alert('Aquí verás tus Q en productos publicados para editarlos')">
+            <div class="icon-circle">📦</div>
+            <span>MIS PRODUCTOS ACTUALES</span>
+        </a>
+
+        <a href="pedidos_vendedor.html" class="action-card">
+            <div class="icon-circle">📩</div>
+            <span>PEDIDOS POR RESPONDER</span>
+        </a>
+
+        <a href="#" class="action-card" onclick="alert('Aquí confirmarás cuando entregues el producto')">
+            <div class="icon-circle">🤝</div>
+            <span>CONFIRMAR ENTREGAS</span>
+        </a>
+
+        <a href="index.html" class="logout-btn">SALIR / CERRAR SESIÓN</a>
+    </div>
+
+    <script>
+        const statusDiv = document.getElementById('status-red');
+        function checkNet() {
+            if (navigator.onLine) {
+                statusDiv.textContent = "🟢 CONECTADO (Los datos se envían en tiempo real)";
+                statusDiv.className = "online";
+            } else {
+                statusDiv.textContent = "🟠 MODO SIN SEÑAL (Los datos se guardan en el teléfono)";
+                statusDiv.className = "offline";
+            }
+        }
+        window.addEventListener('online', checkNet);
+        window.addEventListener('offline', checkNet);
+        checkNet();
+    </script>
+
+</body>
+</html>
+
+
+

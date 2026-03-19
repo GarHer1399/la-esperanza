@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo - La Esperanza</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f5f5f5; margin: 0; padding: 15px; }
+        .producto-card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 6px solid #1976d2; }
+        .precio { color: #2e7d32; font-weight: bold; font-size: 1.3em; margin: 10px 0; }
+        .btn-comprar { background: #1976d2; color: white; border: none; width: 100%; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2 style="color:#1976d2; text-align:center;">Productos de la Región</h2>
+    <div class="producto-card">
+        <h3>Tomate Riñón (Primera)</h3>
+        <p>Vendedor: <b>Don Chepe</b></p>
+        <p class="precio">Q 110.00 / Caja</p>
+        <button class="btn-comprar" onclick="alert('Solicitud enviada en Quetzales')">SOLICITAR COMPRA</button>
+    </div>
+    <div class="producto-card">
+        <h3>Maíz Blanco</h3>
+        <p>Vendedor: <b>Doña María</b></p>
+        <p class="precio">Q 185.00 / Quintal</p>
+        <button class="btn-comprar" onclick="alert('Solicitud enviada en Quetzales')">SOLICITAR COMPRA</button>
+    </div>
+    <p style="text-align: center;"><a href="comprador.html" style="color:#666; text-decoration:none;">← Volver al panel</a></p>
+</body>
+</html>
+

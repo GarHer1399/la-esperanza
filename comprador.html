@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Comprador - La Esperanza</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #e3f2fd; }
+        header { background-color: #1976d2; color: white; padding: 20px; text-align: center; border-radius: 0 0 25px 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .container { padding: 20px; max-width: 500px; margin: auto; }
+        .action-card {
+            background: white; display: flex; align-items: center; padding: 20px;
+            margin-bottom: 15px; border-radius: 15px; text-decoration: none;
+            color: #1976d2; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid #bbdefb; transition: transform 0.2s;
+        }
+        .action-card:active { transform: scale(0.98); }
+        .icon-circle { background: #e3f2fd; width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; margin-right: 20px; flex-shrink: 0; }
+        .logout-btn { display: block; text-align: center; margin-top: 40px; color: #666; text-decoration: none; border: 1px solid #999; padding: 10px; border-radius: 10px; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 style="margin:0; font-size: 24px;">Centro de Compras</h1>
+        <p style="margin:5px 0 0; opacity: 0.9; font-size: 14px;">Abastecimiento Comunitario</p>
+    </header>
+    <div class="container">
+        <p style="text-align:center; color:#333;"><b>Bienvenido a La Esperanza</b></p>
+        <a href="catalogo.html" class="action-card">
+            <div class="icon-circle">🔍</div><span>BUSCAR PRODUCTOS</span>
+        </a>
+        <a href="mis_pedidos.html" class="action-card">
+            <div class="icon-circle">📜</div><span>MIS PEDIDOS Y ESTADO</span>
+        </a>
+        <a href="#" class="action-card" onclick="alert('Aquí confirmarás la recepción de tus Quetzales en producto')">
+            <div class="icon-circle">✅</div><span>CONFIRMAR RECEPCIÓN</span>
+        </a>
+        <a href="index.html" class="logout-btn">CERRAR SESIÓN</a>
+    </div>
+</body>
+</html>

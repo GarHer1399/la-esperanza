@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - La Esperanza</title>
+    <style>
+        body { font-family: sans-serif; background-color: #e8f5e9; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .form-card { background: white; padding: 25px; border-radius: 20px; width: 100%; max-width: 400px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        h2 { color: #2e7d32; text-align: center; }
+        label { display: block; margin-top: 15px; font-weight: bold; color: #555; }
+        input, select { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ccc; border-radius: 10px; font-size: 16px; box-sizing: border-box; }
+        .btn-guardar { width: 100%; background-color: #388e3c; color: white; border: none; padding: 15px; margin-top: 25px; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; }
+        .btn-volver { display: block; text-align: center; margin-top: 15px; color: #666; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="form-card">
+        <h2>Registro de Usuario</h2>
+        <label for="nombre">Nombre Completo</label>
+        <input type="text" id="nombre" placeholder="Ej. Juan Pérez">
+        <label for="telefono">Número de Teléfono</label>
+        <input type="tel" id="telefono" placeholder="Ej. 5555-1234">
+        <label for="rol">Tipo de Usuario</label>
+        <select id="rol">
+            <option value="vendedor">VENDEDOR (Productor)</option>
+            <option value="comprador">COMPRADOR</option>
+        </select>
+        <button class="btn-guardar" onclick="alert('¡Registro guardado exitosamente!'); window.location.href='index.html';">GUARDAR REGISTRO</button>
+        <a href="acceso.html" class="btn-volver">← Regresar</a>
+    </div>
+</body>
+</html>
