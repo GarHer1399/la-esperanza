@@ -7,8 +7,11 @@
     <style>
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #f1f8e9; }
         
-        /* AVISO DE RED DINÁMICO */
-        #status-red { padding: 10px; text-align: center; font-size: 14px; font-weight: bold; color: white; transition: 0.5s; }
+        /* BARRA DE ESTADO DE RED */
+        #status-red { 
+            padding: 10px; text-align: center; font-size: 14px; 
+            font-weight: bold; color: white; transition: 0.5s; 
+        }
         .online { background-color: #2e7d32; } 
         .offline { background-color: #ef6c00; } 
 
@@ -22,7 +25,7 @@
         
         .welcome-msg { color: #333; font-size: 18px; margin-bottom: 25px; text-align: center; }
 
-        /* TARJETAS DE ACCIÓN */
+        /* TARJETAS DE ACCIÓN (BOTONES) */
         .action-card {
             background: white; display: flex; align-items: center; padding: 18px; 
             margin-bottom: 15px; border-radius: 15px; text-decoration: none; 
@@ -50,7 +53,7 @@
 
     <header>
         <h1 style="margin:0; font-size: 24px;">Mi Puesto de Venta</h1>
-        <p style="margin:5px 0 0; opacity: 0.9; font-size: 14px;">Asociación La Esperanza</p>
+        <p style="margin:5px 0 0; opacity: 0.9; font-size: 14px;">Asociación La Esperanza 🇬🇹</p>
     </header>
 
     <div class="container">
@@ -61,7 +64,7 @@
             <span>PUBLICAR NUEVA COSECHA</span>
         </a>
 
-        <a href="#" class="action-card" onclick="alert('Aquí verás tus Q en productos publicados para editarlos')">
+        <a href="mis_productos.html" class="action-card">
             <div class="icon-circle">📦</div>
             <span>MIS PRODUCTOS ACTUALES</span>
         </a>
@@ -71,7 +74,7 @@
             <span>PEDIDOS POR RESPONDER</span>
         </a>
 
-        <a href="#" class="action-card" onclick="alert('Aquí confirmarás cuando entregues el producto')">
+        <a href="confirmar_entregas.html" class="action-card">
             <div class="icon-circle">🤝</div>
             <span>CONFIRMAR ENTREGAS</span>
         </a>
@@ -86,7 +89,7 @@
                 statusDiv.textContent = "🟢 CONECTADO (Los datos se envían en tiempo real)";
                 statusDiv.className = "online";
             } else {
-                statusDiv.textContent = "🟠 MODO SIN SEÑAL (Los datos se guardan en el teléfono)";
+                statusDiv.textContent = "🟠 MODO SIN SEÑAL (Los datos se guardarán en el teléfono)";
                 statusDiv.className = "offline";
             }
         }
