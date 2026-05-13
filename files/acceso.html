@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso - La Esperanza</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background-color: #e8f5e9; 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+        }
+        .login-card { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 20px; 
+            width: 90%; 
+            max-width: 350px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            text-align: center; 
+        }
+        h2 { color: #2e7d32; margin-bottom: 20px; }
+        input { 
+            width: 100%; 
+            padding: 15px; 
+            margin-bottom: 15px; 
+            border: 1px solid #ccc; 
+            border-radius: 10px; 
+            box-sizing: border-box; 
+            font-size: 16px; 
+        }
+        .btn-entrar { 
+            width: 100%; 
+            color: white; 
+            border: none; 
+            padding: 15px; 
+            border-radius: 10px; 
+            font-weight: bold; 
+            font-size: 14px; 
+            cursor: pointer; 
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        /* Colores por Rol para facilitar tus pruebas */
+        .vendedor-btn { background-color: #388e3c; } /* Verde */
+        .comprador-btn { background-color: #1976d2; } /* Azul */
+        .admin-btn { background-color: #455a64; }     /* Gris */
+
+        .divider { height: 1px; background: #ddd; margin: 20px 0; }
+        .btn-registro { color: #1976d2; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h2>Iniciar Sesión</h2>
+        <p style="color: #666; font-size: 14px; margin-bottom: 20px;">
+            Ingresa tus datos para continuar
+        </p>
+
+        <input type="tel" placeholder="Número de teléfono">
+        <input type="password" placeholder="Contraseña">
+
+        <button class="btn-entrar vendedor-btn" onclick="window.location.href='productor.html'">
+            ENTRAR COMO VENDEDOR
+        </button>
+
+        <button class="btn-entrar comprador-btn" onclick="window.location.href='comprador.html'">
+            ENTRAR COMO COMPRADOR
+        </button>
+
+        <button class="btn-entrar admin-btn" onclick="window.location.href='admin.html'">
+            ENTRAR COMO ADMINISTRADOR
+        </button>
+
+        <div class="divider"></div>
+        <p style="font-size: 14px;">¿No tienes cuenta?</p>
+        <a href="registro.html" class="btn-registro">Solicitar Registro con Operador</a>
+        
+        <br><br>
+        <a href="index.html" style="color: #999; font-size: 12px; text-decoration: none;">← Volver al inicio</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Esperanza - Inicio</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0; padding: 0;
+            background-color: #e8f5e9; 
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh;
+        }
+        .main-card {
+            background-color: white; width: 90%; max-width: 450px;
+            border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            overflow: hidden; text-align: center;
+        }
+        .banner-container { width: 100%; height: 200px; overflow: hidden; position: relative; }
+        .banner-image { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .banner-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .banner-title { color: white; font-size: 32px; margin: 0; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .banner-subtitle { color: rgba(255,255,255,0.8); margin: 5px 0 0; font-size: 14px; }
+        .content-area { padding: 30px; }
+        .welcome-text { color: #555; margin-bottom: 25px; font-size: 16px; }
+        .btn-rol {
+            display: flex; align-items: center; width: 100%; padding: 18px;
+            margin-bottom: 15px; border: none; border-radius: 15px;
+            cursor: pointer; transition: all 0.2s ease; text-decoration: none;
+            color: white; font-size: 18px; font-weight: bold; text-transform: uppercase;
+            letter-spacing: 1px; box-sizing: border-box;
+        }
+        .btn-rol:active { transform: scale(0.97); }
+        .vendedor { background-color: #388e3c; }
+        .comprador { background-color: #1976d2; }
+        .admin { background-color: #455a64; }
+        .icon-box { font-size: 26px; margin-right: 20px; background: rgba(255,255,255,0.15); padding: 12px; border-radius: 10px; width: 45px; display: flex; justify-content: center; align-items: center; }
+    </style>
+</head>
+<body>
+    <div class="main-card">
+        <div class="banner-container">
+            <img src="image_5.jpg" alt="Campo Agrícola" class="banner-image">
+            <div class="banner-overlay">
+                <h1 class="banner-title">LA ESPERANZA</h1>
+                <p class="banner-subtitle">Sistema de Gestión Comunitaria</p>
+            </div>
+        </div>
+        <div class="content-area">
+            <p class="welcome-text">Bienvenido. Seleccione su rol para ingresar:</p>
+            <a href="acceso.html" class="btn-rol vendedor">
+                <div class="icon-box">👨‍🌾</div><span>VENDEDOR</span>
+            </a>
+            <a href="acceso.html" class="btn-rol comprador">
+                <div class="icon-box">🛒</div><span>COMPRADOR</span>
+            </a>
+            <a href="acceso.html" class="btn-rol admin">
+                <div class="icon-box">⚙️</div><span>ADMINISTRADOR</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

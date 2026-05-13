@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publicar - La Esperanza</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f1f8e9; padding: 20px; }
+        .form-card { background: white; padding: 25px; border-radius: 20px; max-width: 400px; margin: auto; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        label { display: block; margin-top: 15px; font-weight: bold; color: #444; }
+        input, select { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ccc; border-radius: 10px; box-sizing: border-box; }
+        .btn-publicar { width: 100%; background: #388e3c; color: white; border: none; padding: 15px; margin-top: 25px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .offline-box { background: #fff3e0; border: 1px dashed #ff9800; padding: 10px; margin-top: 15px; border-radius: 8px; font-size: 13px; color: #e65100; }
+    </style>
+</head>
+<body>
+    <div class="form-card">
+        <h2 style="color:#2e7d32; text-align:center;">Nueva Publicación</h2>
+        <label>Producto</label>
+        <select><option>Papa Loman</option><option>Cebolla</option><option>Zanahoria</option></select>
+        <label>Cantidad (Quintales)</label>
+        <input type="number" placeholder="0">
+        <label>Precio (Q)</label>
+        <input type="number" placeholder="0.00">
+        
+        <button class="btn-publicar" onclick="validarGuardado()">SUBIR AL CATÁLOGO</button>
+        
+        <div class="offline-box">
+            ⚠️ <b>Aviso:</b> Si no hay red, la información se guardará en el teléfono hasta que recuperes señal.
+        </div>
+    </div>
+
+    <script>
+        function validarGuardado() {
+            if (navigator.onLine) {
+                alert("✅ Publicado con éxito en la nube.");
+            } else {
+                alert("🟠 GUARDADO LOCAL: No hay señal. Los datos se enviarán solos al recuperar internet.");
+            }
+            window.location.href = 'productor.html';
+        }
+    </script>
+</body>
+</html>
+
+
