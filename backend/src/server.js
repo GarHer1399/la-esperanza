@@ -1,11 +1,11 @@
-const entregasRoutes = require("./routes/entregas.routes");
-const productosRoutes = require("./routes/productos.routes");
-const solicitudesRoutes = require("./routes/solicitudes.routes");
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
 const authRoutes = require("./routes/auth.routes");
+const productosRoutes = require("./routes/productos.routes");
+const solicitudesRoutes = require("./routes/solicitudes.routes");
+const entregasRoutes = require("./routes/entregas.routes");
 
 const app = express();
 
@@ -18,8 +18,8 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api", productosRoutes);
-app.use("/api", entregasRoutes);
 app.use("/api", solicitudesRoutes);
+app.use("/api", entregasRoutes);
 
 const PORT = process.env.PORT || 3000;
 
