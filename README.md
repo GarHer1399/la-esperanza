@@ -18,7 +18,7 @@ Frontend + Backend REST + PostgreSQL
 ## Integrantes
 - Willi Hernandez — Scrum Master
 - Christian Garcia — Frontend Developer
-- Ruber Garcia — Backend Developer
+- Ruben Garcia — Backend Developer
 
 ## Metodología
 SCRUM + Jira
