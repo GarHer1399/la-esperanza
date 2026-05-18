@@ -1,31 +1,19 @@
 function Dashboard() {
-
-  const usuario = JSON.parse(
-    localStorage.getItem("usuario")
-  );
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
 
   const cerrarSesion = () => {
-
     localStorage.removeItem("token");
-
     localStorage.removeItem("usuario");
-
     window.location.href = "/";
   };
 
   return (
     <div className="dashboard">
+      <h1>Bienvenido, {usuario?.nombre}</h1>
 
-      <h1>
-        Bienvenido, {usuario?.nombre}
-      </h1>
-
-      <p>
-        Rol: {usuario?.rol}
-      </p>
+      <p>Rol: {usuario?.rol}</p>
 
       <div className="dashboard-cards">
-
         <div
           className="card"
           onClick={() => window.location.href = "/catalogo"}
@@ -37,11 +25,17 @@ function Dashboard() {
           Publicaciones
         </div>
 
-        <div className="card">
+        <div
+          className="card"
+          onClick={() => window.location.href = "/solicitudes"}
+        >
           Solicitudes
         </div>
 
-        <div className="card">
+        <div
+          className="card"
+          onClick={() => window.location.href = "/entregas"}
+        >
           Entregas
         </div>
 
@@ -52,13 +46,11 @@ function Dashboard() {
         <div className="card">
           Reputación
         </div>
-
       </div>
 
       <button onClick={cerrarSesion}>
         Cerrar sesión
       </button>
-
     </div>
   );
 }
