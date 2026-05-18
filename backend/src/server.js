@@ -7,6 +7,7 @@ const authRoutes = require("./routes/auth.routes");
 const productosRoutes = require("./routes/productos.routes");
 const solicitudesRoutes = require("./routes/solicitudes.routes");
 const entregasRoutes = require("./routes/entregas.routes");
+const incumplimientosRoutes = require("./routes/incumplimientos.routes");
 
 const app = express();
 
@@ -27,6 +28,8 @@ app.use("/api", productosRoutes);
 app.use("/api", solicitudesRoutes);
 
 app.use("/api", entregasRoutes);
+
+app.use("/api", incumplimientosRoutes);
 
 const PORT = process.env.PORT || 3000;
 
