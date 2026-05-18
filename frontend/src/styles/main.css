@@ -140,3 +140,18 @@ button:hover {
 .producto-card p {
   margin: 8px 0;
 }
+
+.mensaje {
+
+  background: #dff0d8;
+
+  color: #256428;
+
+  padding: 15px;
+
+  border-radius: 10px;
+
+  margin-bottom: 20px;
+
+  font-weight: bold;
+}
