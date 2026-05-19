@@ -8,11 +8,11 @@ const productosRoutes = require("./routes/productos.routes");
 const solicitudesRoutes = require("./routes/solicitudes.routes");
 const entregasRoutes = require("./routes/entregas.routes");
 const incumplimientosRoutes = require("./routes/incumplimientos.routes");
+const reputacionRoutes = require("./routes/reputacion.routes");
 
 const app = express();
 
 app.use(cors());
-
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -22,14 +22,11 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
-
 app.use("/api", productosRoutes);
-
 app.use("/api", solicitudesRoutes);
-
 app.use("/api", entregasRoutes);
-
 app.use("/api", incumplimientosRoutes);
+app.use("/api", reputacionRoutes);
 
 const PORT = process.env.PORT || 3000;
 
