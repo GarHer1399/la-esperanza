@@ -71,7 +71,13 @@ function Dashboard() {
           Incumplimientos
         </div>
 
-        <div className="card">
+        <div
+          className="card"
+          onClick={() =>
+            window.location.href =
+              "/reputacion"
+          }
+        >
           Reputación
         </div>
 
