@@ -7,6 +7,7 @@ import Solicitudes from "./pages/Solicitudes";
 import Entregas from "./pages/Entregas";
 import Incumplimientos from "./pages/Incumplimientos";
 import Reputacion from "./pages/Reputacion";
+import Admin from "./pages/Admin";
 
 import "./styles/main.css";
 
@@ -51,6 +52,11 @@ function App() {
         <Route
           path="/reputacion"
           element={<Reputacion />}
+        />
+
+        <Route
+          path="/admin"
+          element={<Admin />}
         />
 
       </Routes>

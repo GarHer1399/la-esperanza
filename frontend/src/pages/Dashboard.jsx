@@ -37,10 +37,6 @@ function Dashboard() {
           Productos
         </div>
 
-        <div className="card">
-          Publicaciones
-        </div>
-
         <div
           className="card"
           onClick={() =>
@@ -79,6 +75,16 @@ function Dashboard() {
           }
         >
           Reputación
+        </div>
+
+        <div
+          className="card"
+          onClick={() =>
+            window.location.href =
+              "/admin"
+          }
+        >
+          Administración
         </div>
 
       </div>
