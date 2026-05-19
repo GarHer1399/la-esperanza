@@ -2,18 +2,21 @@ const express = require("express");
 
 const router = express.Router();
 
+const verificarToken = require("../middlewares/auth.middleware");
+
 const {
   crearSolicitud,
   obtenerSolicitudes,
-  actualizarEstadoSolicitud
+  actualizarEstadoSolicitud,
 } = require("../controllers/solicitudes.controller");
 
-router.post("/solicitudes", crearSolicitud);
+router.post("/solicitudes", verificarToken, crearSolicitud);
 
-router.get("/solicitudes", obtenerSolicitudes);
+router.get("/solicitudes", verificarToken, obtenerSolicitudes);
 
 router.put(
   "/solicitudes/:id/estado",
+  verificarToken,
   actualizarEstadoSolicitud
 );
 
