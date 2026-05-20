@@ -29,8 +29,9 @@ function Login() {
   return (
     <div className="login-container">
       <form className="login-card" onSubmit={iniciarSesion}>
-        <h1>Sistema La Esperanza</h1>
-        <p>Ingreso al sistema agrícola</p>
+        <h1 className="login-title">Sistema La Esperanza</h1>
+
+        <p className="login-subtitle">Ingreso al sistema agrícola</p>
 
         <input
           type="text"
@@ -48,7 +49,7 @@ function Login() {
 
         <button type="submit">Iniciar sesión</button>
 
-        {mensaje && <span>{mensaje}</span>}
+        {mensaje && <span className="login-message">{mensaje}</span>}
       </form>
     </div>
   );
