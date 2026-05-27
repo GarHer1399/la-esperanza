@@ -48,7 +48,7 @@ function Login() {
           <button className="btn azul" onClick={() => login("COMPRADOR")}>ENTRAR COMO COMPRADOR</button>
           <button className="btn gris" onClick={() => login("ADMINISTRADOR")}>ENTRAR COMO ADMINISTRADOR</button>
 
-          <small>Usuarios demo: productor / comprador / admin · Contraseña: 123456</small>
+          <small></small>
           {mensaje && <div className="mensaje error">{mensaje}</div>}
         </div>
       </div>

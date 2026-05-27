@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 import api from "../api/axios";
 
+import { Link } from "react-router-dom";
+
 function Admin() {
 
   const [stats, setStats] =
@@ -43,6 +45,18 @@ function Admin() {
       <p>
         Estadísticas generales del sistema.
       </p>
+
+      <div style={{ marginBottom: "20px" }}>
+
+        <Link to="/admin/usuarios">
+
+          <button>
+            Registrar Usuarios
+          </button>
+
+        </Link>
+
+      </div>
 
       <div className="dashboard-cards">
 

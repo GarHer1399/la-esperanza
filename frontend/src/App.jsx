@@ -8,6 +8,7 @@ import Incumplimientos from "./pages/Incumplimientos";
 import Reputacion from "./pages/Reputacion";
 import Admin from "./pages/Admin";
 import Publicar from "./pages/Publicar";
+import AdminUsuarios from "./pages/AdminUsuarios";
 import "./styles/main.css";
 
 function RutaPrivada({ children }) {
@@ -28,6 +29,7 @@ function App() {
         <Route path="/incumplimientos" element={<RutaPrivada><Incumplimientos /></RutaPrivada>} />
         <Route path="/reputacion" element={<RutaPrivada><Reputacion /></RutaPrivada>} />
         <Route path="/admin" element={<RutaPrivada><Admin /></RutaPrivada>} />
+        <Route path="/admin/usuarios" element={<AdminUsuarios />} />
       </Routes>
     </BrowserRouter>
   );
