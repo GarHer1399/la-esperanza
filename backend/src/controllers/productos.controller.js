@@ -1,5 +1,15 @@
 const pool = require("../config/db");
 
+const obtenerUnidades = async (req, res) => {
+  try {
+    const unidades = await pool.query("SELECT * FROM unidades_medida ORDER BY nombre ASC");
+    res.json(unidades.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: "Error obteniendo unidades" });
+  }
+};
+
 const obtenerProductos = async (req, res) => {
   try {
     const productos = await pool.query(
@@ -108,6 +118,7 @@ const obtenerPublicaciones = async (req, res) => {
 };
 
 module.exports = {
+  obtenerUnidades,
   obtenerProductos,
   crearPublicacion,
   obtenerPublicaciones,
