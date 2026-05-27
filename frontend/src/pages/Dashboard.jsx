@@ -1,98 +1,52 @@
 function Dashboard() {
-
-  const usuario = JSON.parse(
-    localStorage.getItem("usuario")
-  );
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  const rol = usuario?.rol;
 
   const cerrarSesion = () => {
-
-    localStorage.removeItem("token");
-
-    localStorage.removeItem("usuario");
-
+    localStorage.clear();
     window.location.href = "/";
   };
 
+  const ir = (ruta) => (window.location.href = ruta);
+
   return (
+    <div className="panel-page">
+      <header className={`top ${rol === "COMPRADOR" ? "azul-bg" : rol === "ADMINISTRADOR" ? "gris-bg" : "verde-bg"}`}>
+        <p className="status">🟢 CONECTADO (Los datos se envían en tiempo real)</p>
+        <h1>{rol === "COMPRADOR" ? "Centro de Compras" : rol === "ADMINISTRADOR" ? "Panel Asociación" : "Mi Puesto de Venta"}</h1>
+        <p>Asociación La Esperanza</p>
+      </header>
 
-    <div className="dashboard">
+      <main className="menu">
+        <h2>¡Bienvenido, {usuario?.nombre}!</h2>
 
-      <h1>
-        Bienvenido, {usuario?.nombre}
-      </h1>
+        {rol === "PRODUCTOR" && (
+          <>
+            <div className="menu-card" onClick={() => ir("/publicar")}>➕ PUBLICAR NUEVA COSECHA</div>
+            <div className="menu-card" onClick={() => ir("/catalogo")}>📦 MIS PRODUCTOS ACTUALES</div>
+            <div className="menu-card" onClick={() => ir("/solicitudes")}>📥 PEDIDOS POR RESPONDER</div>
+            <div className="menu-card" onClick={() => ir("/entregas")}>🤝 CONFIRMAR ENTREGAS</div>
+          </>
+        )}
 
-      <p>
-        Rol: {usuario?.rol}
-      </p>
+        {rol === "COMPRADOR" && (
+          <>
+            <div className="menu-card" onClick={() => ir("/catalogo")}>🔍 BUSCAR PRODUCTOS</div>
+            <div className="menu-card" onClick={() => ir("/solicitudes")}>📜 MIS PEDIDOS Y ESTADO</div>
+            <div className="menu-card" onClick={() => ir("/entregas")}>✅ CONFIRMAR RECEPCIÓN</div>
+          </>
+        )}
 
-      <div className="dashboard-cards">
+        {rol === "ADMINISTRADOR" && (
+          <>
+            <div className="menu-card" onClick={() => ir("/admin")}>📊 ESTADÍSTICAS GENERALES</div>
+            <div className="menu-card" onClick={() => ir("/incumplimientos")}>⚠️ REPORTES / CONFLICTOS</div>
+            <div className="menu-card" onClick={() => ir("/reputacion")}>⭐ REPUTACIÓN</div>
+          </>
+        )}
 
-        <div
-          className="card"
-          onClick={() =>
-            window.location.href =
-              "/catalogo"
-          }
-        >
-          Productos
-        </div>
-
-        <div
-          className="card"
-          onClick={() =>
-            window.location.href =
-              "/solicitudes"
-          }
-        >
-          Solicitudes
-        </div>
-
-        <div
-          className="card"
-          onClick={() =>
-            window.location.href =
-              "/entregas"
-          }
-        >
-          Entregas
-        </div>
-
-        <div
-          className="card"
-          onClick={() =>
-            window.location.href =
-              "/incumplimientos"
-          }
-        >
-          Incumplimientos
-        </div>
-
-        <div
-          className="card"
-          onClick={() =>
-            window.location.href =
-              "/reputacion"
-          }
-        >
-          Reputación
-        </div>
-
-        <div
-          className="card"
-          onClick={() =>
-            window.location.href =
-              "/admin"
-          }
-        >
-          Administración
-        </div>
-
-      </div>
-
-      <button onClick={cerrarSesion}>
-        Cerrar sesión
-      </button>
-
+        <button className="btn-outline" onClick={cerrarSesion}>SALIR / CERRAR SESIÓN</button>
+      </main>
     </div>
   );
 }

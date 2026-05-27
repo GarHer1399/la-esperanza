@@ -194,3 +194,32 @@ VALUES
 ('Cebolla', 'Verduras'),
 ('Maiz', 'Granos'),
 ('Frijol', 'Granos');
+
+-- =========================
+-- PUNTOS DE ENTREGA DEMO
+-- =========================
+
+INSERT INTO puntos_entrega (nombre, direccion) VALUES
+('Terminal Central', 'Punto de encuentro principal'),
+('Terminal Local La Esperanza', 'Punto comunitario'),
+('Mercado Comunal', 'Área de carga y descarga');
+
+-- =========================
+-- USUARIOS DEMO
+-- Contraseña para todos: 123456
+-- =========================
+
+INSERT INTO usuarios (nombre, telefono, ubicacion, username, password, rol_id)
+VALUES
+('Admin Asociación', '50000001', 'La Esperanza', 'admin', '$2b$10$oQzyxJiAilMs/pte32sHKeUTOSQGsbo41ssSUT/2diNCFeTdCMzJm', 1),
+('Productor Demo', '50000002', 'La Esperanza', 'productor', '$2b$10$oQzyxJiAilMs/pte32sHKeUTOSQGsbo41ssSUT/2diNCFeTdCMzJm', 3),
+('Comprador Demo', '50000003', 'Terminal Central', 'comprador', '$2b$10$oQzyxJiAilMs/pte32sHKeUTOSQGsbo41ssSUT/2diNCFeTdCMzJm', 4);
+
+-- =========================
+-- PUBLICACIONES DEMO
+-- =========================
+
+INSERT INTO publicaciones (productor_id, producto_id, unidad_id, cantidad, precio_referencial, descripcion)
+VALUES
+(2, 1, 3, 25, 120.00, 'Tomate fresco listo para entrega'),
+(2, 4, 1, 10, 180.00, 'Maíz por quintal, cosecha reciente');

@@ -6,20 +6,23 @@ function Login() {
   const [password, setPassword] = useState("");
   const [mensaje, setMensaje] = useState("");
 
-  const iniciarSesion = async (e) => {
-    e.preventDefault();
+  const login = async (rol) => {
+    if (!username || !password) {
+      setMensaje("Ingresa usuario y contraseña");
+      return;
+    }
 
     try {
-      const respuesta = await api.post("/auth/login", {
-        username,
-        password,
-      });
+      const respuesta = await api.post("/auth/login", { username, password });
+      const usuario = respuesta.data.usuario;
+
+      if (rol && usuario.rol !== rol) {
+        setMensaje(`Este usuario no tiene rol ${rol}`);
+        return;
+      }
 
       localStorage.setItem("token", respuesta.data.token);
-      localStorage.setItem("usuario", JSON.stringify(respuesta.data.usuario));
-
-      setMensaje("Login exitoso");
-
+      localStorage.setItem("usuario", JSON.stringify(usuario));
       window.location.href = "/dashboard";
     } catch (error) {
       setMensaje("Usuario o contraseña incorrectos");
@@ -27,30 +30,28 @@ function Login() {
   };
 
   return (
-    <div className="login-container">
-      <form className="login-card" onSubmit={iniciarSesion}>
-        <h1 className="login-title">Sistema La Esperanza</h1>
+    <div className="login-screen">
+      <div className="home-card">
+        <div className="hero">
+          <h1>LA ESPERANZA</h1>
+          <p>Sistema de Gestión Comunitaria</p>
+        </div>
 
-        <p className="login-subtitle">Ingreso al sistema agrícola</p>
+        <div className="login-body">
+          <h2>Iniciar Sesión</h2>
+          <p>Ingresa tus datos para continuar</p>
 
-        <input
-          type="text"
-          placeholder="Usuario"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+          <input placeholder="Usuario" value={username} onChange={(e) => setUsername(e.target.value)} />
+          <input type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} />
 
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <button className="btn verde" onClick={() => login("PRODUCTOR")}>ENTRAR COMO VENDEDOR</button>
+          <button className="btn azul" onClick={() => login("COMPRADOR")}>ENTRAR COMO COMPRADOR</button>
+          <button className="btn gris" onClick={() => login("ADMINISTRADOR")}>ENTRAR COMO ADMINISTRADOR</button>
 
-        <button type="submit">Iniciar sesión</button>
-
-        {mensaje && <span className="login-message">{mensaje}</span>}
-      </form>
+          <small>Usuarios demo: productor / comprador / admin · Contraseña: 123456</small>
+          {mensaje && <div className="mensaje error">{mensaje}</div>}
+        </div>
+      </div>
     </div>
   );
 }
