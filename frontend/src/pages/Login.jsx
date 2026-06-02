@@ -6,14 +6,24 @@ function Login() {
   const [password, setPassword] = useState("");
   const [mensaje, setMensaje] = useState("");
 
-  const normalizarRol = (rol) => {
-    if (rol === "OPERADOR") return "PRODUCTOR";
-    if (rol === "VENDEDOR") return "PRODUCTOR";
-    if (rol === "ADMINISTRADOR") return "ADMIN";
-    return rol;
+  const obtenerRol = (usuario) => {
+    if (usuario.rol) return usuario.rol.toUpperCase();
+
+    switch (usuario.rol_id) {
+      case 1:
+        return "ADMIN";
+      case 2:
+        return "PRODUCTOR";
+      case 3:
+        return "COMPRADOR";
+      default:
+        return "SIN_ROL";
+    }
   };
 
   const login = async (rolEsperado) => {
+    setMensaje("");
+
     if (!username || !password) {
       setMensaje("Ingresa usuario y contraseña");
       return;
@@ -26,67 +36,125 @@ function Login() {
       });
 
       const usuario = respuesta.data.usuario;
-      const rolUsuario = normalizarRol(usuario.rol);
-      const rolBoton = normalizarRol(rolEsperado);
 
-      if (rolBoton && rolUsuario !== rolBoton) {
-        setMensaje(`Este usuario no tiene rol ${rolBoton}`);
+      const rolUsuario = obtenerRol(usuario);
+
+      console.log("Usuario:", usuario);
+      console.log("Rol detectado:", rolUsuario);
+
+      if (rolUsuario !== rolEsperado) {
+        setMensaje(
+          `Este usuario tiene rol ${rolUsuario}, no ${rolEsperado}`
+        );
         return;
       }
 
-      const usuarioNormalizado = {
+      const usuarioFinal = {
         ...usuario,
         rol: rolUsuario,
       };
 
-      localStorage.setItem("token", respuesta.data.token);
-      localStorage.setItem("usuario", JSON.stringify(usuarioNormalizado));
+      localStorage.setItem(
+        "token",
+        respuesta.data.token
+      );
 
-      window.location.href = "/dashboard";
+      localStorage.setItem(
+        "usuario",
+        JSON.stringify(usuarioFinal)
+      );
+
+      // Redirección por rol
+      if (rolUsuario === "ADMIN") {
+        window.location.href = "/admin";
+      } else if (rolUsuario === "PRODUCTOR") {
+        window.location.href = "/dashboard";
+      } else if (rolUsuario === "COMPRADOR") {
+        window.location.href = "/catalogo";
+      } else {
+        setMensaje("Rol no reconocido");
+      }
+
     } catch (error) {
-      setMensaje("Usuario o contraseña incorrectos");
+      console.error(error);
+
+      setMensaje(
+        error.response?.data?.mensaje ||
+        "Usuario o contraseña incorrectos"
+      );
     }
   };
 
   return (
     <div className="login-screen">
       <div className="home-card">
+
         <div className="hero">
           <h1>LA ESPERANZA</h1>
           <p>Sistema de Gestión Comunitaria</p>
         </div>
 
         <div className="login-body">
+
           <h2>Iniciar Sesión</h2>
-          <p>Ingresa tus datos para continuar</p>
+
+          <p>
+            Ingresa tus datos para continuar
+          </p>
 
           <input
+            type="text"
             placeholder="Usuario"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) =>
+              setUsername(e.target.value)
+            }
           />
 
           <input
             type="password"
             placeholder="Contraseña"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) =>
+              setPassword(e.target.value)
+            }
           />
 
-          <button className="btn verde" onClick={() => login("PRODUCTOR")}>
+          <button
+            className="btn verde"
+            onClick={() =>
+              login("PRODUCTOR")
+            }
+          >
             ENTRAR COMO VENDEDOR
           </button>
 
-          <button className="btn azul" onClick={() => login("COMPRADOR")}>
+          <button
+            className="btn azul"
+            onClick={() =>
+              login("COMPRADOR")
+            }
+          >
             ENTRAR COMO COMPRADOR
           </button>
 
-          <button className="btn gris" onClick={() => login("ADMIN")}>
+          <button
+            className="btn gris"
+            onClick={() =>
+              login("ADMIN")
+            }
+          >
             ENTRAR COMO ADMINISTRADOR
           </button>
 
-          {mensaje && <div className="mensaje error">{mensaje}</div>}
+          {mensaje && (
+            <div className="mensaje error">
+              {mensaje}
+            </div>
+          )}
+
         </div>
+
       </div>
     </div>
   );
