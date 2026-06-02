@@ -3,83 +3,57 @@ import api from "../api/axios";
 
 function Solicitudes() {
   const [solicitudes, setSolicitudes] = useState([]);
-  const [cargando, setCargando] = useState(true);
+  const [mensaje, setMensaje] = useState("");
 
-  const cargarSolicitudes = async () => {
+  const cargar = async () => {
     try {
-      const respuesta = await api.get("/solicitudes");
-      setSolicitudes(respuesta.data);
-    } catch (error) {
-      console.error("Error al cargar solicitudes:", error);
-    } finally {
-      setCargando(false);
+      const r = await api.get("/solicitudes");
+      setSolicitudes(r.data);
+    } catch {
+      setMensaje("Error al cargar solicitudes");
     }
   };
 
-  useEffect(() => {
-    cargarSolicitudes();
-  }, []);
+  useEffect(() => { cargar(); }, []);
 
   const cambiarEstado = async (id, estado) => {
     try {
       await api.put(`/solicitudes/${id}/estado`, { estado });
-      cargarSolicitudes();
+      setMensaje(`Solicitud ${estado.toLowerCase()}`);
+      cargar();
     } catch (error) {
-      console.error("Error al cambiar estado:", error);
+      setMensaje(error.response?.data?.mensaje || "Error al cambiar estado");
     }
   };
 
-  if (cargando) {
-    return <p>Cargando solicitudes...</p>;
-  }
-
   return (
-    <div>
+    <div className="page">
       <h1>Solicitudes de Compra</h1>
+      <p>Pedidos enviados por compradores y estado de negociación.</p>
+      {mensaje && <div className="mensaje">{mensaje}</div>}
 
-      {solicitudes.length === 0 ? (
-        <p>No hay solicitudes registradas.</p>
-      ) : (
-        <table border="1" cellPadding="10">
+      <div className="tabla-contenedor">
+        <table>
           <thead>
-            <tr>
-              <th>ID</th>
-              <th>Producto</th>
-              <th>Cantidad</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
+            <tr><th>ID</th><th>Producto</th><th>Comprador</th><th>Cantidad</th><th>Estado</th><th>Acciones</th></tr>
           </thead>
-
           <tbody>
-            {solicitudes.map((solicitud) => (
-              <tr key={solicitud.id_solicitud}>
-                <td>{solicitud.id_solicitud}</td>
-                <td>{solicitud.producto}</td>
-                <td>{solicitud.cantidad_solicitada}</td>
-                <td>{solicitud.estado}</td>
+            {solicitudes.map((s) => (
+              <tr key={s.id}>
+                <td>{s.id}</td>
+                <td>{s.producto}</td>
+                <td>{s.comprador}</td>
+                <td>{s.cantidad_solicitada}</td>
+                <td><span className="badge">{s.estado}</span></td>
                 <td>
-                  <button
-                    onClick={() =>
-                      cambiarEstado(solicitud.id_solicitud, "aceptada")
-                    }
-                  >
-                    Aceptar
-                  </button>
-
-                  <button
-                    onClick={() =>
-                      cambiarEstado(solicitud.id_solicitud, "rechazada")
-                    }
-                  >
-                    Rechazar
-                  </button>
+                  <button onClick={() => cambiarEstado(s.id, "ACEPTADA")}>Aceptar</button>
+                  <button className="btn-danger" onClick={() => cambiarEstado(s.id, "RECHAZADA")}>Rechazar</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-      )}
+      </div>
     </div>
   );
 }
