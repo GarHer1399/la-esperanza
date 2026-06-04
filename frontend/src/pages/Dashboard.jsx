@@ -1,54 +1,34 @@
-function Dashboard() {
-  const usuario = JSON.parse(localStorage.getItem("usuario"));
-  const rol = usuario?.rol;
+import { useNavigate } from 'react-router-dom';
+import Layout from '../components/Layout';
+import { getUser, roleName, ROLES } from '../utils/auth';
 
-  const cerrarSesion = () => {
-    localStorage.clear();
-    window.location.href = "/";
+export default function Dashboard(){
+  const nav=useNavigate(); const u=getUser(); const rol=Number(u.rol_id);
+  const menus = {
+    [ROLES.PRODUCTOR]: [
+      ['➕','Publicar cosecha','/publicar','Crear productos disponibles para venta'],
+      ['📋','Solicitudes recibidas','/solicitudes','Aceptar o rechazar pedidos de compradores'],
+      ['🚚','Mis entregas','/entregas','Programar y confirmar entregas'],
+      ['⚠️','Reportar problema','/incumplimientos','Reportar incumplimientos de entregas'],
+      ['⭐','Mi reputación','/reputacion','Ver historial y estrellas'],
+      ['🌽','Mi inventario','/catalogo','Consultar mis publicaciones']
+    ],
+    [ROLES.COMPRADOR]: [
+      ['🌽','Catálogo agrícola','/catalogo','Buscar productos y enviar solicitudes'],
+      ['📋','Mis solicitudes','/solicitudes','Ver seguimiento de compras'],
+      ['🚚','Mis entregas','/entregas','Validar recepción de productos'],
+      ['⚠️','Reportar problema','/incumplimientos','Reportar incumplimientos'],
+      ['⭐','Mi reputación','/reputacion','Ver historial y estrellas']
+    ],
+    [ROLES.OPERADOR]: [
+      ['👥','Registro asistido','/admin/usuarios','Crear productores o compradores'],
+      ['🚚','Entregas','/entregas','Apoyar coordinación logística'],
+      ['⚠️','Incumplimientos','/incumplimientos','Apoyar captura de reportes']
+    ],
+    [ROLES.ADMIN]: [
+      ['⚙️','Panel de administración','/admin','Reportes, roles y control general']
+    ]
   };
-
-  const ir = (ruta) => (window.location.href = ruta);
-
-  return (
-    <div className="panel-page">
-      <header className={`top ${rol === "COMPRADOR" ? "azul-bg" : rol === "ADMINISTRADOR" ? "gris-bg" : "verde-bg"}`}>
-        <p className="status">🟢 CONECTADO (Los datos se envían en tiempo real)</p>
-        <h1>{rol === "COMPRADOR" ? "Centro de Compras" : rol === "ADMINISTRADOR" ? "Panel Asociación" : "Mi Puesto de Venta"}</h1>
-        <p>Asociación La Esperanza</p>
-      </header>
-
-      <main className="menu">
-        <h2>¡Bienvenido, {usuario?.nombre}!</h2>
-
-        {rol === "PRODUCTOR" && (
-          <>
-            <div className="menu-card" onClick={() => ir("/publicar")}>➕ PUBLICAR NUEVA COSECHA</div>
-            <div className="menu-card" onClick={() => ir("/catalogo")}>📦 MIS PRODUCTOS ACTUALES</div>
-            <div className="menu-card" onClick={() => ir("/solicitudes")}>📥 PEDIDOS POR RESPONDER</div>
-            <div className="menu-card" onClick={() => ir("/entregas")}>🤝 CONFIRMAR ENTREGAS</div>
-          </>
-        )}
-
-        {rol === "COMPRADOR" && (
-          <>
-            <div className="menu-card" onClick={() => ir("/catalogo")}>🔍 BUSCAR PRODUCTOS</div>
-            <div className="menu-card" onClick={() => ir("/solicitudes")}>📜 MIS PEDIDOS Y ESTADO</div>
-            <div className="menu-card" onClick={() => ir("/entregas")}>✅ CONFIRMAR RECEPCIÓN</div>
-          </>
-        )}
-
-        {rol === "ADMINISTRADOR" && (
-          <>
-            <div className="menu-card" onClick={() => ir("/admin")}>📊 ESTADÍSTICAS GENERALES</div>
-            <div className="menu-card" onClick={() => ir("/incumplimientos")}>⚠️ REPORTES / CONFLICTOS</div>
-            <div className="menu-card" onClick={() => ir("/reputacion")}>⭐ REPUTACIÓN</div>
-          </>
-        )}
-
-        <button className="btn-outline" onClick={cerrarSesion}>SALIR / CERRAR SESIÓN</button>
-      </main>
-    </div>
-  );
+  const cards = menus[rol] || [];
+  return <Layout title='Mi Panel Principal' subtitle={`${u.nombre||''} · Rol: ${roleName(rol)}`} color={rol===ROLES.COMPRADOR?'azul-bg':rol===ROLES.ADMIN?'gris-bg':'verde-bg'}><div className='quick-help'>👋 Aquí solo aparecen las opciones permitidas para tu rol. Si no hay internet, las acciones se guardan y se sincronizan después.</div><div className='menu-grid'>{cards.map(c=><button className='big-card' key={c[2]} onClick={()=>nav(c[2])}><span>{c[0]}</span><b>{c[1]}</b><small>{c[3]}</small></button>)}</div></Layout>
 }
-
-export default Dashboard;

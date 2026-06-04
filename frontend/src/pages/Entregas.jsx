@@ -1,62 +1,14 @@
-import { useEffect, useState } from "react";
-import api from "../api/axios";
+import {useEffect,useState} from 'react';
+import Layout from '../components/Layout';
+import api from '../api/axios';
+import {cacheGet,cacheSet,queueAction} from '../utils/offline';
+import {hasRole, ROLES} from '../utils/auth';
 
-function Entregas() {
-  const [entregas, setEntregas] = useState([]);
-  const [mensaje, setMensaje] = useState("");
-
-  useEffect(() => {
-    cargarEntregas();
-  }, []);
-
-  const cargarEntregas = async () => {
-    try {
-      const respuesta = await api.get("/entregas");
-      setEntregas(respuesta.data);
-    } catch (error) {
-      console.error(error);
-      setMensaje("Error cargando entregas");
-    }
-  };
-
-  return (
-    <div className="page">
-      <h1>Entregas</h1>
-      <p>Control de entregas programadas.</p>
-
-      {mensaje && <div className="mensaje">{mensaje}</div>}
-
-      <div className="tabla-contenedor">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Producto</th>
-              <th>Comprador</th>
-              <th>Fecha</th>
-              <th>Hora</th>
-              <th>Punto</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {entregas.map((entrega) => (
-              <tr key={entrega.id}>
-                <td>{entrega.id}</td>
-                <td>{entrega.producto}</td>
-                <td>{entrega.comprador}</td>
-                <td>{entrega.fecha_entrega}</td>
-                <td>{entrega.hora_entrega}</td>
-                <td>{entrega.punto_entrega}</td>
-                <td>{entrega.estado}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
+export default function Entregas(){
+  const [ent,setEnt]=useState(cacheGet('entregas')); const [sol,setSol]=useState([]); const [puntos,setPuntos]=useState([]); const [msg,setMsg]=useState('');
+  const [f,setF]=useState({solicitud_id:'',punto_entrega_id:'',fecha_entrega:'',hora_entrega:'',cantidad_entregada:''});
+  async function cargar(){try{let e=await api.get('/entregas'); setEnt(e.data); cacheSet('entregas',e.data); setSol((await api.get('/solicitudes')).data.filter(s=>s.estado==='ACEPTADA')); setPuntos((await api.get('/puntos-entrega')).data)}catch{setMsg('Modo offline: se muestran datos guardados.')}} useEffect(()=>{cargar()},[]);
+  async function crear(e){e.preventDefault(); const data={...f,cantidad_entregada:Number(f.cantidad_entregada)}; try{await api.post('/entregas',data); setMsg('✅ Entrega programada.'); cargar()}catch(err){if(!navigator.onLine){queueAction({url:'/entregas',method:'post',data}); setMsg('🟠 Entrega guardada para sincronizar.')}else setMsg(err.response?.data?.mensaje||'No se pudo programar')}}
+  async function marcar(id,accion){try{await api.put(`/entregas/${id}/${accion}`); setMsg('✅ Entrega actualizada'); cargar()}catch(e){if(!navigator.onLine){queueAction({url:`/entregas/${id}/${accion}`,method:'put',data:{}}); setMsg('🟠 Confirmación pendiente de sincronizar.')}else setMsg(e.response?.data?.mensaje||'No se pudo actualizar')}}
+  return <Layout title='Control de entregas' subtitle='Productor programa/confirma; comprador valida recepción'>{hasRole(ROLES.PRODUCTOR,ROLES.ADMIN,ROLES.OPERADOR)&&<form className='form-card' onSubmit={crear}><select required value={f.solicitud_id} onChange={e=>setF({...f,solicitud_id:e.target.value})}><option value=''>Solicitud aceptada</option>{sol.map(s=><option key={s.id} value={s.id}>#{s.id} {s.producto} - Comprador: {s.comprador}</option>)}</select><select required value={f.punto_entrega_id} onChange={e=>setF({...f,punto_entrega_id:e.target.value})}><option value=''>Punto de entrega</option>{puntos.map(p=><option key={p.id} value={p.id}>{p.nombre}</option>)}</select><input type='date' required value={f.fecha_entrega} onChange={e=>setF({...f,fecha_entrega:e.target.value})}/><input type='time' required value={f.hora_entrega} onChange={e=>setF({...f,hora_entrega:e.target.value})}/><input type='number' required placeholder='Cantidad acordada' value={f.cantidad_entregada} onChange={e=>setF({...f,cantidad_entregada:e.target.value})}/><button>🚚 Programar entrega</button></form>}<div className='catalogo-grid'>{ent.map(x=><div className='card' key={x.id}><h2>🚚 {x.producto}</h2><p><b>Productor:</b> {x.productor}</p><p><b>Comprador:</b> {x.comprador}</p><p>{x.fecha_entrega} · {x.hora_entrega}</p><p>{x.punto_entrega}</p><span className='badge'>{x.estado}</span>{hasRole(ROLES.PRODUCTOR,ROLES.ADMIN)&&<button onClick={()=>marcar(x.id,'confirmar-productor')}>✅ Confirmé entrega</button>}{hasRole(ROLES.COMPRADOR,ROLES.ADMIN)&&<button onClick={()=>marcar(x.id,'validar-comprador')}>📦 Validé recepción</button>}</div>)}</div>{msg&&<div className='mensaje'>{msg}</div>}</Layout>
 }
-
-export default Entregas;

@@ -1,3 +1,17 @@
+-- Script completo de instalación/reinicio de base de datos.
+-- ADVERTENCIA: elimina las tablas del sistema si ya existen para dejar una instalación limpia.
+
+DROP TABLE IF EXISTS bitacora CASCADE;
+DROP TABLE IF EXISTS incumplimientos CASCADE;
+DROP TABLE IF EXISTS entregas CASCADE;
+DROP TABLE IF EXISTS puntos_entrega CASCADE;
+DROP TABLE IF EXISTS solicitudes_compra CASCADE;
+DROP TABLE IF EXISTS publicaciones CASCADE;
+DROP TABLE IF EXISTS unidades_medida CASCADE;
+DROP TABLE IF EXISTS productos CASCADE;
+DROP TABLE IF EXISTS usuarios CASCADE;
+DROP TABLE IF EXISTS roles CASCADE;
+
 -- =========================================
 -- BASE DE DATOS
 -- Sistema La Esperanza
@@ -196,7 +210,7 @@ VALUES
 ('Frijol', 'Granos');
 
 -- =========================
--- PUNTOS DE ENTREGA DEMO
+-- PUNTOS DE ENTREGA INICIALES
 -- =========================
 
 INSERT INTO puntos_entrega (nombre, direccion) VALUES
@@ -205,18 +219,19 @@ INSERT INTO puntos_entrega (nombre, direccion) VALUES
 ('Mercado Comunal', 'Área de carga y descarga');
 
 -- =========================
--- USUARIOS DEMO
+-- USUARIOS INICIALES
 -- Contraseña para todos: 123456
 -- =========================
 
 INSERT INTO usuarios (nombre, telefono, ubicacion, username, password, rol_id)
 VALUES
 ('Admin Asociación', '50000001', 'La Esperanza', 'admin', '$2b$10$oQzyxJiAilMs/pte32sHKeUTOSQGsbo41ssSUT/2diNCFeTdCMzJm', 1),
-('Productor Demo', '50000002', 'La Esperanza', 'productor', '$2b$10$oQzyxJiAilMs/pte32sHKeUTOSQGsbo41ssSUT/2diNCFeTdCMzJm', 3),
-('Comprador Demo', '50000003', 'Terminal Central', 'comprador', '$2b$10$oQzyxJiAilMs/pte32sHKeUTOSQGsbo41ssSUT/2diNCFeTdCMzJm', 4);
+('Productor La Esperanza', '50000002', 'La Esperanza', 'productor', '$2b$10$oQzyxJiAilMs/pte32sHKeUTOSQGsbo41ssSUT/2diNCFeTdCMzJm', 3),
+('Comprador Terminal Central', '50000003', 'Terminal Central', 'comprador', '$2b$10$oQzyxJiAilMs/pte32sHKeUTOSQGsbo41ssSUT/2diNCFeTdCMzJm', 4),
+('Operador Asociación', '50000004', 'La Esperanza', 'operador', '$2b$10$oQzyxJiAilMs/pte32sHKeUTOSQGsbo41ssSUT/2diNCFeTdCMzJm', 2);
 
 -- =========================
--- PUBLICACIONES DEMO
+-- PUBLICACIONES INICIALES
 -- =========================
 
 INSERT INTO publicaciones (productor_id, producto_id, unidad_id, cantidad, precio_referencial, descripcion)

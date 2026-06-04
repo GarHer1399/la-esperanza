@@ -1,163 +1,52 @@
-import { useState } from "react";
-import api from "../api/axios";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api from '../api/axios';
+import { homeByRole } from '../utils/auth';
 
-function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [mensaje, setMensaje] = useState("");
+export default function Login() {
+  const nav = useNavigate();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [msg, setMsg] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const obtenerRol = (usuario) => {
-    if (usuario.rol) return usuario.rol.toUpperCase();
-
-    switch (usuario.rol_id) {
-      case 1:
-        return "ADMIN";
-      case 2:
-        return "PRODUCTOR";
-      case 3:
-        return "COMPRADOR";
-      default:
-        return "SIN_ROL";
-    }
-  };
-
-  const login = async (rolEsperado) => {
-    setMensaje("");
-
-    if (!username || !password) {
-      setMensaje("Ingresa usuario y contraseña");
+  async function entrar(e) {
+    e?.preventDefault();
+    setMsg('');
+    if (!username.trim() || !password) {
+      setMsg('Ingresa tu usuario y contraseña.');
       return;
     }
-
     try {
-      const respuesta = await api.post("/auth/login", {
-        username,
-        password,
-      });
-
-      const usuario = respuesta.data.usuario;
-
-      const rolUsuario = obtenerRol(usuario);
-
-      console.log("Usuario:", usuario);
-      console.log("Rol detectado:", rolUsuario);
-
-      if (rolUsuario !== rolEsperado) {
-        setMensaje(
-          `Este usuario tiene rol ${rolUsuario}, no ${rolEsperado}`
-        );
-        return;
-      }
-
-      const usuarioFinal = {
-        ...usuario,
-        rol: rolUsuario,
-      };
-
-      localStorage.setItem(
-        "token",
-        respuesta.data.token
-      );
-
-      localStorage.setItem(
-        "usuario",
-        JSON.stringify(usuarioFinal)
-      );
-
-      // Redirección por rol
-      if (rolUsuario === "ADMIN") {
-        window.location.href = "/admin";
-      } else if (rolUsuario === "PRODUCTOR") {
-        window.location.href = "/dashboard";
-      } else if (rolUsuario === "COMPRADOR") {
-        window.location.href = "/catalogo";
-      } else {
-        setMensaje("Rol no reconocido");
-      }
-
-    } catch (error) {
-      console.error(error);
-
-      setMensaje(
-        error.response?.data?.mensaje ||
-        "Usuario o contraseña incorrectos"
-      );
+      setLoading(true);
+      const r = await api.post('/auth/login', { username: username.trim(), password });
+      localStorage.setItem('token', r.data.token);
+      localStorage.setItem('usuario', JSON.stringify(r.data.usuario));
+      nav(homeByRole(r.data.usuario.rol_id), { replace: true });
+    } catch (e) {
+      setMsg(e.response?.data?.mensaje || 'No se pudo iniciar sesión. Revisa usuario, contraseña o conexión.');
+    } finally {
+      setLoading(false);
     }
-  };
+  }
 
   return (
-    <div className="login-screen">
-      <div className="home-card">
-
-        <div className="hero">
-          <h1>LA ESPERANZA</h1>
-          <p>Sistema de Gestión Comunitaria</p>
+    <div className='login-screen farm-bg'>
+      <div className='home-card'>
+        <div className='hero'>
+          <h1>🌾 LA ESPERANZA</h1>
+          <p>Sistema de Gestión y Comercialización Agrícola</p>
         </div>
-
-        <div className="login-body">
-
-          <h2>Iniciar Sesión</h2>
-
-          <p>
-            Ingresa tus datos para continuar
-          </p>
-
-          <input
-            type="text"
-            placeholder="Usuario"
-            value={username}
-            onChange={(e) =>
-              setUsername(e.target.value)
-            }
-          />
-
-          <input
-            type="password"
-            placeholder="Contraseña"
-            value={password}
-            onChange={(e) =>
-              setPassword(e.target.value)
-            }
-          />
-
-          <button
-            className="btn verde"
-            onClick={() =>
-              login("PRODUCTOR")
-            }
-          >
-            ENTRAR COMO VENDEDOR
-          </button>
-
-          <button
-            className="btn azul"
-            onClick={() =>
-              login("COMPRADOR")
-            }
-          >
-            ENTRAR COMO COMPRADOR
-          </button>
-
-          <button
-            className="btn gris"
-            onClick={() =>
-              login("ADMIN")
-            }
-          >
-            ENTRAR COMO ADMINISTRADOR
-          </button>
-
-          {mensaje && (
-            <div className="mensaje error">
-              {mensaje}
-            </div>
-          )}
-
-        </div>
-
+        <form className='login-body' onSubmit={entrar}>
+          <h2>Iniciar sesión</h2>
+          <p>Acceso privado para productores, compradores, operador y asociación.</p>
+          <input placeholder='Usuario' value={username} onChange={e => setUsername(e.target.value)} autoComplete='username' />
+          <input placeholder='Contraseña' type='password' value={password} onChange={e => setPassword(e.target.value)} autoComplete='current-password' />
+          <button className='btn verde' disabled={loading}>{loading ? 'Ingresando...' : '👨‍🌾 ENTRAR AL SISTEMA'}</button>
+          {msg && <div className='mensaje error'>{msg}</div>}
+          <small>Aplicación offline-first: permite trabajar con baja conectividad y sincroniza cuando vuelve internet.</small>
+        </form>
       </div>
     </div>
   );
 }
-
-export default Login;
