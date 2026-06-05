@@ -1,59 +1,13 @@
-import { useEffect, useState } from "react";
-import api from "../api/axios";
+import { useEffect,useState } from 'react';
+import Layout from '../components/Layout';
+import api from '../api/axios';
+import {cacheGet,cacheSet,queueAction} from '../utils/offline';
+import { hasRole, ROLES } from '../utils/auth';
 
-function Catalogo() {
-  const usuario = JSON.parse(localStorage.getItem("usuario"));
-  const [publicaciones, setPublicaciones] = useState([]);
-  const [mensaje, setMensaje] = useState("");
-
-  const cargar = async () => {
-    try {
-      const r = await api.get("/publicaciones");
-      setPublicaciones(r.data);
-    } catch {
-      setMensaje("Error cargando publicaciones");
-    }
-  };
-
-  useEffect(() => { cargar(); }, []);
-
-  const solicitar = async (publicacion) => {
-    const cantidad = prompt(`¿Cuántos ${publicacion.unidad} deseas solicitar de ${publicacion.producto}?`);
-    if (!cantidad) return;
-
-    try {
-      await api.post("/solicitudes", {
-        publicacion_id: publicacion.id,
-        comprador_id: usuario.id,
-        cantidad_solicitada: cantidad,
-      });
-      setMensaje("Solicitud enviada al productor");
-    } catch (error) {
-      setMensaje(error.response?.data?.mensaje || "Error enviando solicitud");
-    }
-  };
-
-  return (
-    <div className="page">
-      <h1>Catálogo de Productos</h1>
-      <p>Productos agrícolas disponibles en la comunidad.</p>
-      {mensaje && <div className="mensaje">{mensaje}</div>}
-
-      <div className="catalogo-grid">
-        {publicaciones.map((item) => (
-          <div className="producto-card" key={item.id}>
-            <h2>{item.producto}</h2>
-            <p><strong>Productor:</strong> {item.productor}</p>
-            <p><strong>Cantidad:</strong> {item.cantidad} {item.unidad}</p>
-            <p><strong>Precio referencial:</strong> Q{item.precio_referencial}</p>
-            <p><strong>Estado:</strong> {item.estado}</p>
-            <p>{item.descripcion}</p>
-            {usuario?.rol === "COMPRADOR" && <button onClick={() => solicitar(item)}>Solicitar compra</button>}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+export default function Catalogo(){
+  const [items,setItems]=useState(cacheGet('publicaciones')); const [q,setQ]=useState(''); const [msg,setMsg]=useState('');
+  async function cargar(){try{const r=await api.get('/publicaciones'); setItems(r.data); cacheSet('publicaciones',r.data)}catch{setMsg('Mostrando datos guardados porque no hay conexión.')}} useEffect(()=>{cargar()},[]);
+  async function solicitar(p){const cantidad=prompt(`¿Cuánto deseas solicitar de ${p.producto}?`); if(!cantidad) return; const data={publicacion_id:p.id, cantidad_solicitada:Number(cantidad)}; try{await api.post('/solicitudes',data); setMsg('✅ Solicitud enviada al productor.');}catch(e){if(!navigator.onLine){queueAction({url:'/solicitudes',method:'post',data}); setMsg('🟠 Sin conexión. La solicitud quedó pendiente para sincronizar.')}else setMsg(e.response?.data?.mensaje||'No se pudo enviar la solicitud')}}
+  const filtrados=items.filter(i=>(i.producto||'').toLowerCase().includes(q.toLowerCase()));
+  return <Layout title={hasRole(ROLES.PRODUCTOR)?'Mi inventario publicado':'Catálogo de productos'} subtitle={hasRole(ROLES.COMPRADOR)?'Busca productos disponibles y envía solicitudes':'Consulta publicaciones permitidas'} color='azul-bg'><input className='search' placeholder='🔎 Buscar tomate, papa, maíz...' value={q} onChange={e=>setQ(e.target.value)}/>{msg&&<div className='mensaje'>{msg}</div>}<div className='catalogo-grid'>{filtrados.map(p=><div className='producto-card' key={p.id}><div className='icon-xl'>🌱</div><h2>{p.producto}</h2><p><b>Disponible:</b> {p.cantidad} {p.unidad}</p><p><b>Precio referencial:</b> Q{p.precio_referencial}</p><p><b>Productor:</b> {p.productor}</p><p><b>Reputación:</b> {'⭐'.repeat(Math.round(Number(p.reputacion||5)))}</p><span className='semaforo'>🟢 {p.estado}</span>{hasRole(ROLES.COMPRADOR)&&<button className='btn azul' onClick={()=>solicitar(p)}>🛒 Solicitar compra</button>}</div>)}</div></Layout>
 }
-
-export default Catalogo;

@@ -1,103 +1,13 @@
-import { useState } from "react";
-import api from "../api/axios";
+import {useEffect,useState} from 'react';
+import Layout from '../components/Layout';
+import api from '../api/axios';
+import {queueAction} from '../utils/offline';
+import {hasRole, ROLES} from '../utils/auth';
 
-function AdminUsuarios() {
-  const [form, setForm] = useState({
-    nombre: "",
-    telefono: "",
-    ubicacion: "",
-    username: "",
-    password: "",
-    rol_id: 2,
-  });
-
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const registrarUsuario = async (e) => {
-    e.preventDefault();
-
-    try {
-      await api.post("/auth/register", {
-        ...form,
-        rol_id: Number(form.rol_id),
-      });
-
-      alert("Usuario registrado correctamente");
-
-      setForm({
-        nombre: "",
-        telefono: "",
-        ubicacion: "",
-        username: "",
-        password: "",
-        rol_id: 2,
-      });
-    } catch (error) {
-      alert(error.response?.data?.mensaje || "Error al registrar usuario");
-    }
-  };
-
-  return (
-    <div className="page">
-      <h1>Gestión de usuarios</h1>
-      <p>Registro asistido de productores y compradores.</p>
-
-      <form onSubmit={registrarUsuario} className="form-card">
-        <input
-          name="nombre"
-          placeholder="Nombre completo"
-          value={form.nombre}
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          name="telefono"
-          placeholder="Teléfono"
-          value={form.telefono}
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          name="ubicacion"
-          placeholder="Ubicación"
-          value={form.ubicacion}
-          onChange={handleChange}
-        />
-
-        <input
-          name="username"
-          placeholder="Usuario"
-          value={form.username}
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          name="password"
-          type="password"
-          placeholder="Contraseña"
-          value={form.password}
-          onChange={handleChange}
-          required
-        />
-
-        <select name="rol_id" value={form.rol_id} onChange={handleChange}>
-          <option value={2}>Productor / Vendedor</option>
-          <option value={3}>Comprador</option>
-          <option value={1}>Administrador</option>
-        </select>
-
-        <button type="submit">Registrar usuario</button>
-      </form>
-    </div>
-  );
+export default function AdminUsuarios(){
+  const [usuarios,setUsuarios]=useState([]); const [msg,setMsg]=useState(''); const [f,setF]=useState({nombre:'',telefono:'',ubicacion:'La Esperanza',username:'',password:'123456',rol_id:3});
+  async function cargar(){try{setUsuarios((await api.get('/usuarios')).data)}catch(e){setMsg(e.response?.data?.mensaje||'No se pudieron cargar usuarios')}} useEffect(()=>{cargar()},[]);
+  async function crear(e){e.preventDefault(); try{await api.post('/auth/register',f); setMsg('✅ Usuario registrado'); setF({...f,nombre:'',telefono:'',username:''}); cargar()}catch(err){if(!navigator.onLine){queueAction({url:'/auth/register',method:'post',data:f}); setMsg('🟠 Usuario guardado para sincronizar.')}else setMsg(err.response?.data?.mensaje||'No se pudo registrar')}}
+  async function actualizar(id,data){try{await api.put(`/usuarios/${id}`,data); cargar()}catch(e){setMsg(e.response?.data?.mensaje||'No se pudo actualizar')}}
+  return <Layout title='Usuarios y roles' subtitle='Registro asistido y control de permisos' color='gris-bg'><form className='form-card' onSubmit={crear}><input required placeholder='Nombre completo' value={f.nombre} onChange={e=>setF({...f,nombre:e.target.value})}/><input required placeholder='Teléfono' value={f.telefono} onChange={e=>setF({...f,telefono:e.target.value})}/><input placeholder='Ubicación' value={f.ubicacion} onChange={e=>setF({...f,ubicacion:e.target.value})}/><input required placeholder='Usuario' value={f.username} onChange={e=>setF({...f,username:e.target.value})}/><input required placeholder='Contraseña inicial' value={f.password} onChange={e=>setF({...f,password:e.target.value})}/><select value={f.rol_id} onChange={e=>setF({...f,rol_id:Number(e.target.value)})}><option value={3}>Productor</option><option value={4}>Comprador</option><option value={2}>Operador</option>{hasRole(ROLES.ADMIN)&&<option value={1}>Administrador</option>}</select><button>👤 Guardar registro asistido</button></form><div className='tabla-contenedor'><table><thead><tr><th>Nombre</th><th>Teléfono</th><th>Usuario</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>{usuarios.map(u=><tr key={u.id}><td>{u.nombre}</td><td>{u.telefono}</td><td>{u.username}</td><td>{u.rol}</td><td>{u.estado?'Activo':'Inactivo'}</td><td>{hasRole(ROLES.ADMIN)&&<><button onClick={()=>actualizar(u.id,{rol_id:3})}>Productor</button><button onClick={()=>actualizar(u.id,{rol_id:4})}>Comprador</button><button onClick={()=>actualizar(u.id,{rol_id:2})}>Operador</button><button className='btn-secondary' onClick={()=>actualizar(u.id,{estado:!u.estado})}>{u.estado?'Desactivar':'Activar'}</button></>}</td></tr>)}</tbody></table></div>{msg&&<div className='mensaje'>{msg}</div>}</Layout>
 }
-
-export default AdminUsuarios;

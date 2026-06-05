@@ -1,31 +1,14 @@
-const express = require("express");
-
+const express = require('express');
 const router = express.Router();
+const verificarToken = require('../middlewares/auth.middleware');
+const { autorizarRoles, ROLES } = require('../middlewares/roles.middleware');
+const c = require('../controllers/admin.controller');
 
-const {
-  obtenerEstadisticas
-} = require(
-  "../controllers/admin.controller"
-);
-
-/**
- * @swagger
- * /admin/estadisticas:
- *   get:
- *     summary: Obtener estadísticas administrativas
- *     description: Retorna estadísticas generales del sistema
- *     tags:
- *       - Administración
- *     responses:
- *       200:
- *         description: Estadísticas obtenidas correctamente
- *       500:
- *         description: Error interno del servidor
- */
-
-router.get(
-  "/admin/estadisticas",
-  obtenerEstadisticas
-);
+router.get('/admin/estadisticas', verificarToken, autorizarRoles(ROLES.ADMIN), c.obtenerEstadisticas);
+router.get('/usuarios', verificarToken, autorizarRoles(ROLES.ADMIN, ROLES.OPERADOR), c.obtenerUsuarios);
+router.put('/usuarios/:id', verificarToken, autorizarRoles(ROLES.ADMIN), c.actualizarUsuario);
+router.get('/puntos-entrega', verificarToken, c.obtenerPuntos);
+router.post('/puntos-entrega', verificarToken, autorizarRoles(ROLES.ADMIN), c.crearPunto);
+router.get('/historial', verificarToken, c.historial);
 
 module.exports = router;
